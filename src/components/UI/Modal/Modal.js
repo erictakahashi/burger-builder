@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import styles from './Modal.module.css';
-import Aux from '../../../hoc/Aux';
+import Aux from '../../../hoc/Aux/Aux';
 import Backdrop from '../Backdrop/Backdrop';
+import styles from './Modal.module.css';
 
 class Modal extends Component {
   // Used to avoid unnecessary re-render of Modal and its children.
