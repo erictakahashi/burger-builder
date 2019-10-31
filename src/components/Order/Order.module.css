@@ -4,5 +4,13 @@
 	box-sizing: border-box;
 	margin: 10px auto;
 	padding: 10px;
-	width: 100%;
+	width: 80%;
+}
+
+.Ingredient {
+	border: 1px solid #ccc;
+	display: inline-block;
+	margin: 0 8px;
+	padding: 5px;
+	text-transform: capitalize;
 }
