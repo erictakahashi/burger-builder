@@ -26,17 +26,17 @@ class BurgerBuilder extends Component {
     error: false
   }
 
-  componentDidMount () {
+  componentDidMount() {
     axios.get('ingredients.json')
       .then(response => {
-        this.setState({ingredients: response.data});
+        this.setState({ ingredients: response.data });
       })
       .catch(error => {
-        this.setState({error: true});
+        this.setState({ error: true });
       });
   }
 
-  updatePurchaseState (ingredients) {
+  updatePurchaseState(ingredients) {
     const sum = Object.keys(ingredients)
       .map(igKey => {
         return ingredients[igKey];
@@ -57,7 +57,7 @@ class BurgerBuilder extends Component {
     const oldPrice = this.state.totalPrice;
     const newPrice = oldPrice + priceAddition;
 
-    this.setState({ingredients: updatedIngredients, totalPrice: newPrice});
+    this.setState({ ingredients: updatedIngredients, totalPrice: newPrice });
     this.updatePurchaseState(updatedIngredients);
   }
 
@@ -72,16 +72,16 @@ class BurgerBuilder extends Component {
     const oldPrice = this.state.totalPrice;
     const newPrice = oldPrice - priceDeduction;
 
-    this.setState({ingredients: updatedIngredients, totalPrice: newPrice});
+    this.setState({ ingredients: updatedIngredients, totalPrice: newPrice });
     this.updatePurchaseState(updatedIngredients);
   }
 
   puchaseHandler = () => {
-    this.setState({purchasing: true});
+    this.setState({ purchasing: true });
   }
 
   purchaseCancelHandler = () => {
-    this.setState({purchasing: false});
+    this.setState({ purchasing: false });
   }
 
   purchaseContinueHandler = () => {
@@ -111,10 +111,26 @@ class BurgerBuilder extends Component {
     //     this.setState({loading: true, purchasing: false});
     //   });
 
-    this.props.history.push('/checkout');
+
+    // Alternative Solution
+    // const queryParams = [];
+    // for (let i in this.state.ingredients) {
+    //   queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]));
+    // }
+    // const queryString = queryParams.join('&');
+
+    let queryString = Object.keys(this.state.ingredients)
+      .reduce((query, ingredientKey, index) => {
+        return query + ((index === 0) ? '?' : '&') + encodeURIComponent(ingredientKey) + '=' + encodeURIComponent(this.state.ingredients[ingredientKey]);
+      }, '');
+
+    this.props.history.push({
+      pathname: '/checkout',
+      search: queryString
+    });
   }
 
-  render () {
+  render() {
     const disabledInfo = { ...this.state.ingredients };
     for (let key in disabledInfo) {
       disabledInfo[key] = disabledInfo[key] <= 0;
