@@ -68,9 +68,15 @@ class ContactData extends Component {
 
     this.setState({ loading: true });
 
+    const formData = Object.keys(this.state.orderForm)
+      .reduce((obj, key) => {
+        obj[key] = this.state.orderForm[key].value;
+        return obj;
+      }, {})
     const order = {
       ingredients: this.props.ingredients,
       price: this.props.totalPrice,
+      orderData: formData
     };
 
     // For firebase it is necessary to add the .json extension.
@@ -84,6 +90,14 @@ class ContactData extends Component {
       });
   }
 
+  inputChangedHandler = (event, inputIdentifier) => {
+    const updatedOrderForm = { ...this.state.orderForm };
+    const updatedFormElement = { ...updatedOrderForm[inputIdentifier] };
+    updatedFormElement.value = event.target.value;
+    updatedOrderForm[inputIdentifier] = updatedFormElement;
+    this.setState({ orderForm: updatedOrderForm });
+  }
+
   render() {
     const formObjects = this.state.orderForm;
     const formElements = Object.keys(formObjects)
@@ -91,13 +105,14 @@ class ContactData extends Component {
         <Input key={key}
           elementType={formObjects[key].elementType}
           elementConfig={formObjects[key].elementConfig}
-          value={formObjects[key].value} />
+          value={formObjects[key].value}
+          changed={(event) => this.inputChangedHandler(event, key)} />
       ));
 
     let form = (
-      <form>
+      <form onSubmit={this.orderHandler}>
         {formElements}
-        <Button type="Success" clicked={this.orderHandler}>Order</Button>
+        <Button type="Success">Order</Button>
       </form>
     );
     if (this.state.loading) {
