@@ -45,7 +45,7 @@ class ContactData extends Component {
         elementType: 'input',
         elementConfig: {
           type: 'email',
-          placeholder: 'Your E-Mmail'
+          placeholder: 'Your E-Mail'
         },
         value: ''
       },
@@ -87,12 +87,12 @@ class ContactData extends Component {
   render() {
     const formObjects = this.state.orderForm;
     const formElements = Object.keys(formObjects)
-      .map(key => {
-        return <Input key={key}
-                  elementType={formObjects[key].elementType} 
-                  elementConfig={formObjects[key].elementConfig}
-                  value={formObjects[key].value} />}
-      );
+      .map(key => (
+        <Input key={key}
+          elementType={formObjects[key].elementType}
+          elementConfig={formObjects[key].elementConfig}
+          value={formObjects[key].value} />
+      ));
 
     let form = (
       <form>
