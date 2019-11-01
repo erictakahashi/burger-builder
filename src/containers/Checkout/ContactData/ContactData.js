@@ -2,18 +2,64 @@ import React, { Component } from 'react';
 
 import axios from '../../../axios-orders';
 import Button from '../../../components/UI/Button/Button';
+import Input from '../../../components/UI/Input/Input';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import styles from './ContactData.module.css';
 
 class ContactData extends Component {
   state = {
-    address: {
-      country: "Brazil",
-      street: "Test Street A",
-      zipCode: "12345"
+    orderForm: {
+      name: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Your Name'
+        },
+        value: ''
+      },
+      street: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Street'
+        },
+        value: ''
+      },
+      zipCode: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'ZIP CODE'
+        },
+        value: ''
+      },
+      country: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Country'
+        },
+        value: ''
+      },
+      email: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'email',
+          placeholder: 'Your E-Mmail'
+        },
+        value: ''
+      },
+      deliveryMethod: {
+        elementType: 'select',
+        elementConfig: {
+          options: [
+            { value: 'fastest', displayValue: 'Fastest' },
+            { value: 'cheapest', displayValue: 'Cheapest' }
+          ]
+        },
+        value: ''
+      },
     },
-    email: "test@test.com",
-    name: "Eric",
     loading: false
   }
 
@@ -25,16 +71,6 @@ class ContactData extends Component {
     const order = {
       ingredients: this.props.ingredients,
       price: this.props.totalPrice,
-      customer: {
-        name: 'Eric',
-        address: {
-          street: 'Test Street A',
-          zipCode: '12345',
-          country: 'Brazil'
-        },
-        email: 'test@test.com'
-      },
-      deliveryMethod: 'fastest'
     };
 
     // For firebase it is necessary to add the .json extension.
@@ -49,13 +85,18 @@ class ContactData extends Component {
   }
 
   render() {
+    const formObjects = this.state.orderForm;
+    const formElements = Object.keys(formObjects)
+      .map(key => {
+        return <Input key={key}
+                  elementType={formObjects[key].elementType} 
+                  elementConfig={formObjects[key].elementConfig}
+                  value={formObjects[key].value} />}
+      );
+
     let form = (
       <form>
-        <input className={styles.Input} type="text" name="name" placeholder="Your Name" />
-        <input className={styles.Input} type="email" name="email" placeholder="Your Email" />
-        <input className={styles.Input} type="text" name="street" placeholder="Street" />
-        <input className={styles.Input} type="text" name="zipcode" placeholder="Zip Code" />
-        <input className={styles.Input} type="text" name="country" placeholder="Country" />
+        {formElements}
         <Button type="Success" clicked={this.orderHandler}>Order</Button>
       </form>
     );
